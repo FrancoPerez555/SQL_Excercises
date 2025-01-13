@@ -1,0 +1,15 @@
+#Se crea la tabla que tendrá la agrupación de regiones por título
+CREATE TABLE eternal-outlook-444801-k5.New_table.Tabla_group_title(
+  #Se definen las columnas y el tipos de datos
+  Title STRING,
+  Region_count INT64) AS
+
+#Se realiza la consulta, se cuenta el número de regiones diferentes en los que se ha presentado cada título
+SELECT original_title as `Title`, count(distinct region) as `Number of Regions`
+
+#Se realiza un Join donde los ID de los títulos sean los mismos y se discriminan las filas donde las regiones sean nulas
+FROM`bigquery-public-data.imdb.title_basics` T, `bigquery-public-data.imdb.title_akas` A
+where T.tconst = A.title_id and T.original_title is not null and A.region is not null
+
+#Se agrupan los datos por Título
+group by original_title
